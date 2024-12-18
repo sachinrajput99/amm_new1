@@ -1,96 +1,71 @@
-import React, { useState } from "react";
-import ComponentOne from "./myComponent/ComponentOne";
-import ComponentTwo from "./myComponent/ComponentTwo";
-import ComponentThree from "./myComponent/ComponentThree";
-import ComponentFour from "./myComponent/ComponentFour";
-import FuturisticForm from "./myComponent/FuturisticForm";
+import Swap from "./myComponent/Swap";
+import AddLiquidity from "./myComponent/AddLiquidity";
+import RemoveLiquidity from "./myComponent/RemoveLiquidity";
+import { useState } from "react";
 
-function App() {
-  const [component, setComponent] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState(""); // Track active button
+const SwapCard = () => {
+  const [render, setRender] = useState("swap");
 
-  const handleButtonClick = (name) => {
-    setComponent(name);
-    setActiveButton(name);
+  const handleConnect = (e) => {
+    e.preventDefault();
   };
 
   return (
-    <div className=" h-screen  bg-gray-900 text-white flex flex-col">
-      {/* Navbar */}
-      <nav className="bg-gray-800 p-4 shadow-md relative z-10">
-        <div className="container mx-auto flex flex-row justify-between items-center">
-          {/* Logo */}
-          <h1 className="text-xl font-bold">Minimalistic UI</h1>
-
-          {/* Hamburger Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden flex items-center justify-center"
+    <div
+      className={`${
+        render !== "swap" && "h-screen"
+      } flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800`}
+    >
+      <div className="bg-gray-900 rounded-2xl p-6 shadow-lg w-96 text-white">
+        {/* Header */}
+        <nav className="flex justify-between items-center mb-4">
+          <h2
+            className={`font-semibold text-lg ${
+              render === "swap" ? "text-white" : "text-gray-500"
+            }`}
+            onClick={() => setRender("swap")}
           >
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            Swap
+          </h2>
+          <h2
+            className={`font-semibold text-lg ${
+              render === "AddLiquidity" ? "text-white" : "text-gray-500"
+            }`}
+            onClick={() => setRender("AddLiquidity")}
+          >
+            Add Liquidity
+          </h2>
+          <h2
+            className={`font-semibold text-lg ${
+              render === "RemoveLiquidity" ? "text-white" : "text-gray-500"
+            }`}
+            onClick={() => setRender("RemoveLiquidity")}
+          >
+            Remove Liquidity
+          </h2>
+        </nav>
+        {/* From Input */}
+        {render === "swap" && <Swap />}
+        {render === "AddLiquidity" && <AddLiquidity />}
+        {render === "RemoveLiquidity" && <RemoveLiquidity />}
+        <div className="flex justify-between mb-5 mt-2">
+          <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
+            Faucet XFI
           </button>
-
-          {/* Navigation Links */}
-          <div
-            className={`${
-              isMenuOpen
-                ? "absolute top-full right-0 w-[50%] bg-gray-800 p-4 shadow-lg"
-                : "hidden"
-            } md:flex flex-col md:flex-row md:static md:w-auto`}
-          >
-            {["futuristicForm", "one", "two", "three", "four"].map((item) => (
-              <button
-                key={item}
-                onClick={() => handleButtonClick(item)}
-                className={`w-full px-3 py-2 mt-2 text-sm font-semibold rounded-lg md:mr-2 transition-transform duration-200 ${
-                  activeButton === item
-                    ? "bg-yellow-600 text-gray-900 transform translate-y-1 shadow-inner"
-                    : "bg-yellow-500 text-gray-900 hover:bg-yellow-400"
-                }`}
-              >
-                {`Component ${item === "futuristicForm" ? "Form" : item}`}
-              </button>
-            ))}
-          </div>
+          <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
+            Faucet MPX
+          </button>
         </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="flex-grow p-6 flex items-center justify-center">
-        <div className="bg-gray-800 p-6 border rounded-lg shadow-md w-full text-center">
-          {component === "futuristicForm" && <FuturisticForm />}
-          {component === "one" && <ComponentOne />}
-          {component === "two" && <ComponentTwo />}
-          {component === "three" && <ComponentThree />}
-          {component === "four" && <ComponentFour />}
-          {!component && (
-            <p className="text-gray-400">
-              <FuturisticForm />
-            </p>
-          )}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 p-4 text-center">
-        <p className="text-gray-400">© 2024 Minimalistic UI</p>
-      </footer>
+        {/* Connect Wallet Button */}
+        <button
+          onClick={handleConnect}
+          className="w-full bg-purple-700 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg"
+        >
+          Connect Wallet
+        </button>
+      </div>
     </div>
   );
-}
+};
 
-export default App;
+export default SwapCard;
