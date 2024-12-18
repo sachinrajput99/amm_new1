@@ -12,9 +12,7 @@ const SwapCard = () => {
 
   return (
     <div
-      className={`${
-        render !== "swap" && "h-screen"
-      } flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800`}
+      className={`h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800`}
     >
       <div className="bg-gray-900 rounded-2xl p-6 shadow-lg w-96 text-white">
         {/* Header */}
