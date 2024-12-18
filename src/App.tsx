@@ -1,6 +1,7 @@
 import Swap from "./myComponent/Swap";
 import AddLiquidity from "./myComponent/AddLiquidity";
 import RemoveLiquidity from "./myComponent/RemoveLiquidity";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState } from "react";
 
 const SwapCard = () => {
@@ -47,20 +48,20 @@ const SwapCard = () => {
         {render === "AddLiquidity" && <AddLiquidity />}
         {render === "RemoveLiquidity" && <RemoveLiquidity />}
         <div className="flex justify-between mb-5 mt-2">
-          <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
+          {/* <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
             Faucet XFI
-          </button>
+          </button> */}
           <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
             Faucet MPX
           </button>
         </div>
         {/* Connect Wallet Button */}
-        <button
-          onClick={handleConnect}
-          className="w-full bg-purple-700 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg"
-        >
-          Connect Wallet
-        </button>
+        <div className="w-full flex justify-center">
+  <div className="text-white font-semibold py-3 rounded-lg w-auto">
+    <ConnectButton />
+  </div>
+</div>
+
       </div>
     </div>
   );
