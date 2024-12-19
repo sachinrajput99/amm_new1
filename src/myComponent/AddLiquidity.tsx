@@ -4,6 +4,8 @@ import { formatUnits, parseEther, parseUnits } from "ethers";
 import { AMM, MPX, AMM_ADDRESS, MPX_ADDRESS } from "../abi/constant";
 import { toast } from "react-hot-toast";
 import { parseErrorString } from "@/utils/parseErrorString";
+import { waitForTransactionReceipt, readContract, writeContract } from 'wagmi/actions';
+import { config } from "@/utils/config";
 
 
 const AddLiquidity = () => {
@@ -47,6 +49,75 @@ const AddLiquidity = () => {
 
   // }
 
+  // const handleApprove = async () => {
+  //   try {
+  //     const args = {
+  //       functionName: 'approve',
+  //       args: [AMM, parseUnits(addMPXValue.toString(), 18)], // Approve AMM contract to spend tokens
+  //       // account: senderAddress
+  //       address: MPX_ADDRESS,
+  //       abi: MPX,
+  //     }
+  //     await toast.promise((async () => {
+  //       const hash = await writeContract(config, args);
+  //       await waitForTransactionReceipt(config, { hash, pollingInterval: 1000, confirmations: 3 });
+  //       console.log(">>>>>>>", hash);
+  //     })(), {
+  //       error: "Approval error:",
+  //       loading: "Approving...",
+  //       success: "Approved!",
+  //     });
+
+  //     return true;
+  //   } catch (error) {
+  //     console.error('Approval error:', error);
+  //     return false;
+  //   }
+  // }
+
+
+  const handleApprove = async () => {
+    try {
+      if (!AMM || !MPX_ADDRESS || !MPX || addMPXValue === undefined) {
+        throw new Error("Required variables are missing or undefined.");
+      }
+  
+      const args = {
+        abi: MPX, // Ensure this matches the expected ABI format
+        functionName: "approve",
+        args: [AMM, parseUnits(addMPXValue.toString(), 18)], // Approve AMM contract to spend tokens
+        address: MPX_ADDRESS,
+      };
+  
+      console.log("Approval arguments:", args);
+  
+      await toast.promise(
+        (async () => {
+          const hash = await writeContract(config, args); // Ensure writeContract expects this structure
+          console.log("Transaction hash:", hash);
+  
+          await waitForTransactionReceipt(config, {
+            hash,
+            pollingInterval: 1000,
+            confirmations: 3,
+          });
+  
+          console.log("Transaction confirmed:", hash);
+        })(),
+        {
+          error: "Approval error:",
+          loading: "Approving...",
+          success: "Approved!",
+        }
+      );
+  
+      return true;
+    } catch (error) {
+      console.error("Approval error:", error.message || error);
+      return false;
+    }
+  };
+  
   const handleLiquidForm = async (e : any) => {
     e.preventDefault();
 
@@ -57,6 +128,7 @@ const AddLiquidity = () => {
     console.log("parsed2", parsed2.toString());
 
     try {
+      await handleApprove();
       await toast.promise(
         (async () => {
           const { hash } = await writeContractAsync({
