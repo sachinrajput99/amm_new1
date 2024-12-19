@@ -144,6 +144,8 @@ const AddLiquidity = () => {
             args: [[parseUnits(addXFIValue.toString(), 18), parseUnits(addMPXValue.toString(), 18)]],
             value: parseUnits(addXFIValue.toString(), 18),
           });
+          console.log("Transaction Hash:", hash);
+          
         })(),
         {
           error: "Transfer error",
