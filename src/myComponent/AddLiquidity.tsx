@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
-import { formatUnits, parseEther, parseUnits } from "ethers";
+import { formatUnits, parseEther } from "ethers";
 import { AMM, MPX, AMM_ADDRESS, MPX_ADDRESS } from "../abi/constant";
 import { toast } from "react-hot-toast";
 import { parseErrorString } from "@/utils/parseErrorString";
 import { waitForTransactionReceipt, readContract, writeContract } from 'wagmi/actions';
 import { config } from "@/utils/config";
+import { isAddress } from "viem";
+import { parseUnits } from "ethers";
 
 
 const AddLiquidity = () => {
@@ -78,22 +80,26 @@ const AddLiquidity = () => {
 
   const handleApprove = async () => {
     try {
-      if (!AMM || !MPX_ADDRESS || !MPX || addMPXValue === undefined) {
-        throw new Error("Required variables are missing or undefined.");
+      if (!MPX_ADDRESS || !isAddress(MPX_ADDRESS)) {
+        throw new Error(`Invalid MPX_ADDRESS: ${MPX_ADDRESS}`);
+      }
+  
+      if (!AMM || !isAddress(AMM_ADDRESS)) {
+        throw new Error(`Invalid AMM address: ${AMM_ADDRESS}`);
       }
   
       const args = {
-        abi: MPX, // Ensure this matches the expected ABI format
+        abi: MPX,
         functionName: "approve",
-        args: [AMM, parseUnits(addMPXValue.toString(), 18)], // Approve AMM contract to spend tokens
+        args: [AMM_ADDRESS, parseUnits(addMPXValue.toString(), 18)],
         address: MPX_ADDRESS,
       };
   
-      console.log("Approval arguments:", args);
+      console.log("Arguments for writeContract:", args);
   
       await toast.promise(
         (async () => {
-          const hash = await writeContract(config, args); // Ensure writeContract expects this structure
+          const hash = await writeContract(config, args);
           console.log("Transaction hash:", hash);
   
           await waitForTransactionReceipt(config, {
@@ -135,25 +141,19 @@ const AddLiquidity = () => {
             address: AMM_ADDRESS,
             abi: AMM,
             functionName: "addLiquidity",
-            args: [parseUnits(addXFIValue.toString(), 18), parseUnits(addMPXValue.toString(), 18)],
+            args: [[parseUnits(addXFIValue.toString(), 18), parseUnits(addMPXValue.toString(), 18)]],
             value: parseUnits(addXFIValue.toString(), 18),
           });
         })(),
         {
-          loading: `Approving token ...`,
-          success: () => `Approval successful!`,
-          error: (err) => {
-            // new function for toast error
-            const jsonOutput = parseErrorString(err.message);
-
-            return jsonOutput.errorType; // Return a clean error message for the toast
-          },
+          error: "Transfer error",
+          loading: "Transferring...",
+          success: "Transfer successful!",
         }
       );
     } catch (err) {
      console.log("Error in Catch :" , err);
     }
-
     setAddXFIValue(""); 
     setAddMPXValue("");
   };
