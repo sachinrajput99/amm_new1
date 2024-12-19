@@ -6,10 +6,8 @@ import { useState } from "react";
 import { MPX, MPX_ADDRESS } from "./abi/constant";
 import { toast } from "react-hot-toast";
 import { config } from "./utils/config";
-import {
-  waitForTransactionReceipt,
-  writeContract,
-} from "wagmi/actions";
+import { waitForTransactionReceipt, writeContract } from "wagmi/actions";
+import Card from "./myComponent/Card";
 
 const SwapCard = () => {
   const [render, setRender] = useState("swap");
@@ -46,9 +44,17 @@ const SwapCard = () => {
 
   return (
     <div
-      className={`h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800`}
+      className={` pb-4 flex flex-col sm:gap-14 sm:flex-row items-center   justify-center  bg-gradient-to-br from-gray-900 to-gray-800`}
     >
-      <div className="bg-gray-900 rounded-2xl p-6 shadow-lg w-96 text-white">
+      <div className="hidden sm:block">
+        {" "}
+        <Card />
+      </div>
+
+      <div className="relative bg-gradient-to-r from-purple-500 to-purple-700 h-20  items-center justify-center flex   rounded-xl shadow-lg overflow-hidden w-96 sm:hidden">
+        <p className="text-white text-4xl font-bold">Adaptive AMM</p>
+      </div>
+      <div className="bg-gray-900  rounded-2xl p-6 shadow-lg w-96 text-white">
         {/* Header */}
         <nav className="flex justify-between items-center mb-4">
           <h2
@@ -80,20 +86,27 @@ const SwapCard = () => {
         {render === "swap" && <Swap />}
         {render === "AddLiquidity" && <AddLiquidity />}
         {render === "RemoveLiquidity" && <RemoveLiquidity />}
-        <div className="flex justify-between mb-5 mt-2">
+        <div className="flex justify-center mb-5 mt-2">
           {/* <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]">
             Faucet XFI
           </button> */}
-          <button className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]" onClick={getMPXTokens}>
+          <button
+            className="bg-purple-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-lg w-[48%]"
+            onClick={getMPXTokens}
+          >
             Faucet MPX
           </button>
         </div>
         {/* Connect Wallet Button */}
         <div className="w-full flex justify-center">
-          <div className="text-white font-semibold py-3 rounded-lg w-auto">
+          <div className="text-white font-semibold py-3 rounded-lg w-auto ">
             <ConnectButton />
           </div>
         </div>
+      </div>
+      <div className="block sm:hidden">
+        {" "}
+        <Card />
       </div>
     </div>
   );
