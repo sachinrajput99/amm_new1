@@ -8,7 +8,6 @@ import { toast } from "react-hot-toast";
 import { config } from "./utils/config";
 import {
   waitForTransactionReceipt,
-  readContract,
   writeContract,
 } from "wagmi/actions";
 
