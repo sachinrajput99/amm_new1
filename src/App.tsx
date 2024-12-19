@@ -46,10 +46,10 @@ const SwapCard = () => {
     <div
       className={` pb-4 flex flex-col sm:gap-14 sm:flex-row items-center   justify-center  bg-gradient-to-br from-gray-900 to-gray-800`}
     >
-      <div className="hidden sm:block">
+      {/* <div className="hidden sm:block">
         {" "}
         <Card />
-      </div>
+      </div> */}
 
       <div className="relative bg-gradient-to-r from-purple-500 to-purple-700 h-20  items-center justify-center flex   rounded-xl shadow-lg overflow-hidden w-96 sm:hidden">
         <p className="text-white text-4xl font-bold">Adaptive AMM</p>
@@ -104,10 +104,11 @@ const SwapCard = () => {
           </div>
         </div>
       </div>
-      <div className="block sm:hidden">
-        {" "}
+      <div>
+
         <Card />
       </div>
+    
     </div>
   );
 };
